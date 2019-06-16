@@ -27,11 +27,6 @@ def move_pipes(matrix):
       row[i] = row[i+1]
     row[-1] = blue 
   return matrix
-def check_collision(matrix):
-  if matrix[y][x] == red:
-    return True
-  else: 
-    return False
 def draw_astronaut(event):
     global y
     global x
@@ -52,15 +47,8 @@ sense.stick.direction_any = draw_astronaut
 
 while True:
   matrix = draw_matrix(matrix)
-  if check_collision(matrix):
-      break
   for i in range(3):
-        if y<7:
-          y+=1
-        matrix = move_pipes(matrix)
-        sense.set_pixels(flatten(matrix))
-        sense.set_pixel(x, y, yellow)   
-        if check_collision(matrix):
-            break
-        sleep(1)
-sense.show_message("Game Over!")
+    sense.set_pixels(flatten(matrix))
+    matrix = move_pipes(matrix)
+    sleep(1)
+
