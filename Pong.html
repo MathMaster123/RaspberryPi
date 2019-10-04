@@ -1,1 +1,54 @@
-<iframe src="https://trinket.io/embed/python/d29ef0f285?start=result" width="100%" height="100%" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+from time import sleep
+from sense_hat import SenseHat
+sense=SenseHat()
+sense.clear()
+white = (255, 255, 255)
+red = (255, 0, 0)
+baty = 4
+x = 0
+ballposition = [3, 4]
+ballvelocity = [1, 1]
+def display_bat():
+  sense.set_pixel(0, baty, white)
+  sense.set_pixel(0, baty+1, white)
+  sense.set_pixel(0, baty-1, white)
+sleep(1)
+def move_up(event):
+  if event.action == 'pressed':
+    global baty
+    if baty !=1:
+      baty -= 1
+def move_down(event):
+  global baty
+  if event.action == 'pressed':
+    if baty !=6:
+      baty += 1
+def drawball():
+    global x
+    sense.set_pixel(ballposition[0], ballposition[1],red)
+    
+    if ballposition[0] == 7:
+        ballvelocity[0] = -ballvelocity[0]
+    
+    if ballposition[1] == 0 or ballposition[1] == 7:
+        ballvelocity[1] = -ballvelocity[1]
+    if ballposition[0] == 1 and (baty - 1) <= ballposition[1] <= (baty+1):
+        ballvelocity[0] = -ballvelocity[0]
+        x += 1
+    if ballposition[0] == 0:
+        sense.clear()
+        x = str(x)
+        sense.show_letter(x)
+        quit()
+        
+    ballposition[0] += ballvelocity[0]
+    ballposition[1] += ballvelocity[1]
+sense.stick.direction_up = move_up
+sense.stick.direction_down = move_down
+
+while True:
+    
+  sense.clear()
+  display_bat()
+  drawball()
+  sleep(.15)
